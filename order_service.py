@@ -5,6 +5,7 @@ app = Flask(__name__)
 
 orders = []
 
+# Alamat Book Service
 BOOK_SERVICE_URL = "http://localhost:5001"
 
 
@@ -13,6 +14,7 @@ def create_order():
     data = request.get_json()
     book_id = data.get('book_id')
 
+    # Komunikasi dengan Book Service
     try:
         response = requests.get(
             f"{BOOK_SERVICE_URL}/books/{book_id}"
@@ -43,4 +45,5 @@ def create_order():
 
 
 if __name__ == '__main__':
+    # Order Service berjalan di port 5002
     app.run(port=5002, debug=True)

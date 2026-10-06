@@ -14,26 +14,27 @@ books = [
 orders = []
 
 
-# --- FITUR BUKU ---
+# =========================
+# FITUR BUKU
+# =========================
 @app.route('/books', methods=['GET'])
 def get_books():
     return jsonify(books)
 
 
-# --- FITUR PESANAN ---
+# =========================
+# FITUR PESANAN
+# =========================
 @app.route('/orders', methods=['POST'])
 def create_order():
     data = request.get_json()
     book_id = data.get('book_id')
 
-    # Cek stok buku
-    for b in books:
-        if b['id'] == book_id and b['stock'] > 0:
+    # Cek stok buku langsung dari variabel global
+    for book in books:
+        if book['id'] == book_id and book['stock'] > 0:
+            book['stock'] -= 1
 
-            # Kurangi stok
-            b['stock'] -= 1
-
-            # Buat pesanan
             order = {
                 "id": len(orders) + 1,
                 "book_id": book_id,
@@ -49,5 +50,9 @@ def create_order():
     }), 400
 
 
+# =========================
+# MENJALANKAN APLIKASI
+# =========================
 if __name__ == '__main__':
+    # Monolith berjalan di port 5000
     app.run(port=5000, debug=True)
